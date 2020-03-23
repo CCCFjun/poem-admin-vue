@@ -4,6 +4,6 @@ const prodEnv = require('./prod.env')
 
 module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
-  BASE_API: '"/api/teacher"',
+  BASE_API: '"/api/admin"',
   BASE_WEBSOCKET: '"ws://localhost:8080/api/websocket/"'
 })

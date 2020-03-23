@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="filter-container">
       <el-input v-model="listQuery.noticeContent" placeholder="搜索公告" clearable style="width: 200px;margin-right: 15px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-input v-model="listQuery.teaName" placeholder="搜索发布人姓名" clearable style="width: 200px;margin-right: 15px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.adminName" placeholder="搜索发布人姓名" clearable style="width: 200px;margin-right: 15px;" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-button v-waves class="filter-item" style="margin-right: 10px;" type="primary" icon="el-icon-search" @click="handleFilter">
         搜索
       </el-button>
@@ -21,7 +21,7 @@
       highlight-current-row
       style="width: 100%;"
     >
-      <el-table-column label="序号" prop="id" sortable align="center" width="120">
+      <el-table-column label="序号" prop="id" sortable align="center" width="100">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
         </template>
@@ -31,29 +31,25 @@
           <span>{{ scope.row.noticeContent }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="发布人姓名" align="center" width="140">
+      <el-table-column label="发布人" align="center" width="120">
         <template slot-scope="scope">
-          <span>{{ scope.row.teaName }}</span>
+          <span>{{ scope.row.adminName }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="tno" sortable label="发布教工号" align="center" width="140">
+      <el-table-column prop="ano" sortable label="发布人账号" align="center" width="120">
         <template slot-scope="scope">
-          <span>{{ scope.row.tno }}</span>
+          <span>{{ scope.row.ano }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="noticeCreateTime" sortable label="发布公告时间" align="center" width="220">
+      <el-table-column prop="noticeCreateTime" sortable label="发布时间" align="center" width="220">
         <template slot-scope="scope">
           <span>{{ scope.row.noticeCreateTime | date-format }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding" width="220">
+      <el-table-column label="操作" align="center" class-name="small-padding" width="140">
         <template slot-scope="{row}">
-          <el-button v-waves type="primary" icon="el-icon-edit" size="mini" @click="handleUpdate(row)">
-            编辑公告
-          </el-button>
-          <el-button v-waves type="danger" icon="el-icon-delete" size="mini" @click="confirmDeleteNotice(row)">
-            删除
-          </el-button>
+          <el-button v-waves type="primary" icon="el-icon-edit" circle @click="handleUpdate(row)"></el-button>
+          <el-button v-waves type="danger" icon="el-icon-delete" circle @click="confirmDeleteNotice(row)"></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -106,12 +102,12 @@ export default {
         page: 1,
         limit: 10,
         noticeContent: undefined,
-        teaName: undefined
+        adminName: undefined
       },
       temp: {
         noticeContent: '',
-        teaName: this.$store.state.teacher.userInfo.teaName,
-        tno: this.$store.state.teacher.userInfo.tno
+        adminName: this.$store.state.admin.userInfo.admName,
+        ano: this.$store.state.admin.userInfo.ano
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -177,7 +173,7 @@ export default {
     async handleFilter(){
       this.listQuery.page = 1
       this.listLoading = true
-      let result = await reqSearchNoticesList(this.listQuery.noticeContent, this.listQuery.teaName)
+      let result = await reqSearchNoticesList(this.listQuery.noticeContent, this.listQuery.adminName)
       if (result.statu === 0){
         this.total = result.data.length
         this.list = result.data.filter((item, index) => index < this.listQuery.limit * this.listQuery.page && index >= this.listQuery.limit * (this.listQuery.page - 1))
@@ -186,9 +182,9 @@ export default {
     },
     resetTemp(){
       this.temp = {
-        noticeContent: '',
-        teaName: this.$store.state.teacher.userInfo.teaName,
-        tno: this.$store.state.teacher.userInfo.tno
+        noticeContent: "",
+        adminName: this.$store.state.admin.userInfo.admName,
+        ano: this.$store.state.admin.userInfo.ano
       }
     },
     handleCreate(){

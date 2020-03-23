@@ -63,19 +63,6 @@ export const constantRouterMap = [
     ]
   },
 
-  // {
-  //   path: '/notice',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       name: 'Notice',
-  //       component: () => import('@/views/notice/infoTable'),
-  //       meta: { title: '公告管理', icon: 'notice' }
-  //     }
-  //   ]
-  // },
-
   {
     path: '/paper',
     component: Layout,
@@ -207,19 +194,30 @@ export const constantRouterMap = [
       }
     ]
   },
-  // {
-  //   path: '/feedback',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       name: 'Feedback',
-  //       component: () => import('@/views/feedback/feedbackTable'),
-  //       meta: { title: '意见反馈', icon: 'notice' }
-  //     }
-  //   ]
-  // },
-
+  {
+    path: '/feedback',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'Feedback',
+        component: () => import('@/views/feedback/feedbackTable'),
+        meta: { title: '意见反馈', icon: 'notice' }
+      }
+    ]
+  },
+  {
+    path: '/notice',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'Notice',
+        component: () => import('@/views/notice/infoTable'),
+        meta: { title: '公告管理', icon: 'notice' }
+      }
+    ]
+  },
 
   { path: '*', redirect: '/404', hidden: true }
 ]

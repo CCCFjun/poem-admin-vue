@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="filter-container">
       <el-input v-model="listQuery.feedbackContent" placeholder="搜索留言内容" clearable style="width: 200px;margin-right: 15px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-input v-model="listQuery.stuName" placeholder="搜索留言人" clearable style="width: 200px;margin-right: 15px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.userName" placeholder="搜索留言人" clearable style="width: 200px;margin-right: 15px;" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-input v-model="listQuery.admAnswer" placeholder="搜索回复内容" clearable style="width: 200px;margin-right: 15px;" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-input v-model="listQuery.admName" placeholder="搜索回复人" clearable style="width: 200px;margin-right: 15px;" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-select v-model="listQuery.feedbackStatus" placeholder="搜索留言回复状态" clearable style="width: 200px;margin-right: 15px;" class="filter-item" @change="handleFilter">
@@ -23,7 +23,7 @@
       highlight-current-row
       style="width: 100%;"
     >
-      <el-table-column label="序号" prop="tno" sortable align="center" width="100">
+      <el-table-column label="序号" prop="tno" sortable align="center" width="80">
         <template slot-scope="scope">
           <el-badge :is-dot="scope.row.feedbackStatus === '0'" style="margin-top: 10px">
             <span>{{ scope.row.id }}</span>
@@ -40,19 +40,9 @@
           <span>{{ scope.row.feedbackCreateTime | date-format }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="留言人" align="center" width="120">
+      <el-table-column label="留言人" align="center" width="100">
         <template slot-scope="scope">
-          <div :class="{ 'read_bg_img': scope.row.feedbackStatus === '2', 'no_read_bg_img': scope.row.feedbackStatus === '1' }">
-            <viewer>
-              <img :src="scope.row.stuImgSrc || require('@/assets/images/profile.jpg')" style="width: 40px;height: 40px;border-radius: 20px">
-            </viewer>
-            <div>{{ scope.row.stuName }}</div>
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column prop="sno" sortable label="留言人ID" align="center" width="120">
-        <template slot-scope="scope">
-          <span>{{ scope.row.sno }}</span>
+          <div>{{ scope.row.userName }}</div>
         </template>
       </el-table-column>
       <el-table-column label="回复内容" align="center">
@@ -61,26 +51,23 @@
           <span v-else>待回复</span>
         </template>
       </el-table-column>
-      <el-table-column label="回复人" align="center" width="120">
+      <el-table-column label="回复人" align="center" width="100">
         <template slot-scope="scope">
-          <viewer v-if="scope.row.admName">
-            <img src="@/assets/images/admin.png" style="width: 40px;height: 40px;border-radius: 20px">
-          </viewer>
           <div>{{ scope.row.admName || '待回复' }}</div>
         </template>
       </el-table-column>
-      <el-table-column prop="ano" sortable label="回复人ID" align="center" width="120">
+      <!-- <el-table-column prop="ano" sortable label="回复人ID" align="center" width="120">
         <template slot-scope="scope">
           <span>{{ scope.row.ano || '待回复' }}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column prop="replyTime" sortable label="回复时间" align="center" width="160">
         <template slot-scope="scope">
           <span v-if="scope.row.replyTime">{{ scope.row.replyTime | date-format }}</span>
           <span v-else>待回复</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding" width="200">
+      <el-table-column label="操作" align="center" class-name="small-padding" width="180">
         <template slot-scope="{row}">
           <div style="margin-top: 10px">
             <el-badge v-if="row.feedbackStatus === '0'" :value="1" type="warning" style="margin-right: 20px">
@@ -89,8 +76,7 @@
             <el-button v-waves v-else size="mini" disabled>
               已回复
             </el-button>
-            <el-button v-waves type="danger" icon="el-icon-delete" size="mini" @click="confirmDeleteFeedback(row)">
-              删除
+            <el-button v-waves type="danger" icon="el-icon-delete" circle @click="confirmDeleteFeedback(row)">
             </el-button>
           </div>
         </template>
@@ -106,10 +92,10 @@
         </el-form-item>
         <el-form-item label="回复内容" prop="admAnswer">
           <el-input v-model="temp.admAnswer" :rows="5" type="textarea" />
-          <i id="emotionBtn" :style="{ color: showEmotion?'#65b1ff':''}" class="iconfont iconbiaoqing" style="font-size: 24px;float: right" @click="clickEmotion" />
-          <div v-show="showEmotion" id="emotionDiv" style="background: #ffffff">
+          <!-- <i id="emotionBtn" :style="{ color: showEmotion?'#65b1ff':''}" class="iconfont iconbiaoqing" style="font-size: 24px;float: right" @click="clickEmotion" /> -->
+          <!-- <div v-show="showEmotion" id="emotionDiv" style="background: #ffffff">
             <emotion :height="200" @emotion="handleEmotion"/>
-          </div>
+          </div> -->
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -122,8 +108,6 @@
       </div>
     </el-dialog>
 
-    <!--可自定义按钮的样式、show/hide临界点、返回的位置  -->
-    <!--如需文字提示，可在外部添加element的<el-tooltip></el-tooltip>元素  -->
     <el-tooltip placement="top" content="返回顶部">
       <back-to-top :custom-style="myBackToTopStyle" :visibility-height="300" :back-position="50" transition-name="fade" />
     </el-tooltip>
@@ -151,7 +135,7 @@ export default {
         page: 1,
         limit: 10,
         feedbackContent: undefined,
-        stuName: undefined,
+        userName: undefined,
         admAnswer: undefined,
         admName: undefined,
         feedbackStatus: undefined
@@ -188,11 +172,11 @@ export default {
   mounted() {
     // 初始化
     this.init()
-    document.addEventListener('click', (e) => {
-      if (!$(e.target).closest('#emotionBtn,#emotionDiv').length) {
-        this.showEmotion = false
-      }
-    })
+    // document.addEventListener('click', (e) => {
+    //   if (!$(e.target).closest('#emotionBtn,#emotionDiv').length) {
+    //     this.showEmotion = false
+    //   }
+    // })
   },
   destroyed() {
     // 销毁监听
@@ -212,7 +196,7 @@ export default {
       }, 0)
     },
     confirmDeleteFeedback(row) {
-      this.$confirm('确定删除该留言吗?已回复且学生已读才可删除', '提示', {
+      this.$confirm('确定删除该留言吗?已回复且用户已读才可删除', '提示', {
         confirmButtonText: '确定删除',
         cancelButtonText: '取消',
         type: 'warning'
@@ -224,7 +208,7 @@ export default {
           })
         } else if (row.feedbackStatus === '1') {
           this.$message({
-            message: '该留言回复学生未读，无法删除',
+            message: '该留言回复用户未读，无法删除',
             type: 'error'
           })
         } else {
@@ -252,7 +236,7 @@ export default {
       this.listQuery.page = 1
       this.listLoading = true
       let feedbackStatus = this.listQuery.feedbackStatus
-      if (this.listQuery.feedbackStatus === null || this.listQuery.feedbackStatus === undefined) {
+      if (this.listQuery.feedbackStatus === null || this.listQuery.feedbackStatus === undefined || this.listQuery.feedbackStatus === "") {
         feedbackStatus = undefined
       }
       let admAnswer = this.listQuery.admAnswer
@@ -263,7 +247,7 @@ export default {
       if (this.listQuery.admName === '' || this.listQuery.admName === undefined) {
         admName = undefined
       }
-      const result = await reqSearchFeedbacksList(this.listQuery.feedbackContent, this.listQuery.stuName, admAnswer, admName, feedbackStatus)
+      const result = await reqSearchFeedbacksList(this.listQuery.feedbackContent, this.listQuery.userName, admAnswer, admName, feedbackStatus)
       if (result.statu === 0) {
         this.total = result.data.length
         this.list = result.data.filter((item, index) => index < this.listQuery.limit * this.listQuery.page && index >= this.listQuery.limit * (this.listQuery.page - 1))
