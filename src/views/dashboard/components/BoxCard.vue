@@ -1,10 +1,10 @@
 <template>
   <el-card class="box-card-component">
     <div slot="header" class="box-card-header">
-      <img src="@/assets/images/info_tab_img.png">
+      <img src="@/assets/images/card_img.png">
     </div>
     <div style="position:relative;">
-      <pan-thumb :image="teaImg" class="panThumb" />
+      <pan-thumb :image="adminImg" class="panThumb" />
       <mallki class-name="mallki-text" text="诗词问答系统管理员端" />
       <div style="padding-top:35px;" class="progress-item">
         <div class="info_item">
@@ -71,7 +71,7 @@ export default {
   },
   data() {
     return {
-      teaImg: require('@/assets/images/teacher.jpg'),
+      adminImg: require('@/assets/images/admin.png'),
       statisticsData: {
         article_count: 1024,
         pageviews_count: 1024
@@ -97,7 +97,7 @@ export default {
 .box-card-component {
   .box-card-header {
     position: relative;
-    height: 220px;
+    height: 140px;
     img {
       width: 100%;
       height: 100%;
@@ -139,10 +139,5 @@ export default {
       padding-right: 50px;
     }
   }
-  /*@media only screen and (max-width: 1510px){
-    .mallki-text{
-      display: none;
-    }
-  }*/
 }
 </style>

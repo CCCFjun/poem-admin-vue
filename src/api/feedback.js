@@ -1,6 +1,6 @@
 import ajax from '@/config/ajax'
-const BASE_URL = "/api/admin"
-// const BASE_URL = "http://101.37.13.111:8085/api/admin"
+// const BASE_URL = "/api/admin"
+const BASE_URL = "http://101.37.13.111:8085/api/admin"
 
 // 获取未回复留言条数
 export const reqGetUnReplyCount = () => ajax(BASE_URL + '/getUnReplyCount')

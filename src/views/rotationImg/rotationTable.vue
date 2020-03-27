@@ -76,7 +76,7 @@
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
             class="avatar-uploader"
-            action="/api/teacher/uploadPicture">
+            action="/api/admin/uploadPicture">
             <img v-if="temp.imgSrc" :src="temp.imgSrc" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"/>
           </el-upload>

@@ -2,14 +2,8 @@
   <div class="app-container">
     <div class="filter-container">
       <el-input v-model="listQuery.langName" placeholder="搜索题型名称" clearable style="width: 200px;margin-right: 15px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-select v-model="listQuery.isRecommend" placeholder="搜索题型是否被推荐" clearable style="width: 200px;margin-right: 15px;" class="filter-item" @change="handleFilter">
-        <el-option v-for="item in recommendOptions" :key="item.key" :label="item.label" :value="item.key" />
-      </el-select>
       <el-button v-waves class="filter-item" style="margin-right: 10px;" type="primary" icon="el-icon-search" @click="handleFilter">
         搜索
-      </el-button>
-      <el-button v-waves class="filter-item" style="margin-left: 0;margin-right: 10px;" type="primary" icon="el-icon-circle-plus-outline" @click="handleCreate">
-        添加
       </el-button>
     </div>
 
@@ -37,22 +31,10 @@
           <span>{{ scope.row.langDesc }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="题型图像" align="center" width="100">
-        <template slot-scope="scope">
-          <viewer>
-            <img :src="scope.row.langImgSrc" style="width: 40px;height: 40px">
-          </viewer>
-        </template>
-      </el-table-column>
       <el-table-column prop="imgCreateTime" sortable label="题型最后更新时间" align="center" width="180">
         <template slot-scope="scope">
           <span v-if="scope.row.langChangeTime">{{ scope.row.langChangeTime | date-format }}</span>
           <span v-else>暂无更新记录</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="显示推荐" align="center" width="120">
-        <template slot-scope="scope">
-          <span>{{ scope.row.isRecommend === '1' ? '是' : '否' }}</span>
         </template>
       </el-table-column>
       <el-table-column prop="queCount" sortable label="题目数" align="center" width="120">
@@ -63,7 +45,6 @@
       <el-table-column label="操作" align="center" class-name="small-padding" width="160">
         <template slot-scope="{row}">
           <el-button type="primary" icon="el-icon-edit" circle @click="handleUpdate(row)"></el-button>
-          <el-button type="danger" icon="el-icon-delete" circle @click="confirmDeleteType(row)"></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -78,32 +59,13 @@
         <el-form-item label="题型描述" prop="langDesc">
           <el-input v-model="temp.langDesc" />
         </el-form-item>
-        <el-form-item label="题型图像" prop="langImgSrc">
-          <el-upload
-            :show-file-list="false"
-            :on-success="handleAvatarSuccess"
-            :before-upload="beforeAvatarUpload"
-            class="avatar-uploader"
-            action="/api/teacher/uploadPicture">
-            <img v-if="temp.langImgSrc" :src="temp.langImgSrc" class="avatar">
-            <i v-else class="el-icon-plus avatar-uploader-icon"/>
-          </el-upload>
-          <el-button v-waves :disabled="!temp.langImgSrc" type="danger" icon="el-icon-delete" size="mini" @click="deletePictureSrc">
-            删除
-          </el-button>
-        </el-form-item>
-        <el-form-item label="是否显示推荐" prop="isRecommend">
-          <el-select v-model="temp.isRecommend" class="filter-item">
-            <el-option v-for="item in recommendOptions" :key="item.key" :label="item.label" :value="item.key" />
-          </el-select>
-        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
           取消
         </el-button>
-        <el-button type="primary" @click="dialogStatus==='添加'?createData():updateData()">
-          {{ dialogStatus==='添加'?'确认添加':'确认编辑' }}
+        <el-button type="primary" @click="updateData">
+          确认编辑
         </el-button>
       </div>
     </el-dialog>
@@ -113,15 +75,6 @@
     <el-tooltip placement="top" content="返回顶部">
       <back-to-top :custom-style="myBackToTopStyle" :visibility-height="300" :back-position="50" transition-name="fade" />
     </el-tooltip>
-
-    <!-- <el-dialog :visible.sync="dialogRotationImgVisible" title="轮播图预览">
-      <el-carousel :interval="4000">
-        <el-carousel-item v-for="item in list" :key="item.imgId">
-          <img :src="item.imgSrc" style="width: 100%;height: 100%">
-          <h3>{{ item.imgTitle }}</h3>
-        </el-carousel-item>
-      </el-carousel>
-    </el-dialog> -->
   </div>
 </template>
 
@@ -146,24 +99,19 @@ export default {
         limit: 10,
         langName: undefined,
         langDesc: undefined,
-        langCreatedBy: undefined,
-        isRecommend: undefined
+        langCreatedBy: undefined
       },
-      recommendOptions: [{ label: '是', key: '1' }, { label: '否', key: '0' }],
       temp: {
         langName: '',
         langDesc: '',
         langImgSrc: '',
-        isRecommend: ''
       },
       dialogFormVisible: false,
       dialogStatus: '',
       dialogRotationImgVisible: false,
       rules: {
         langName: [{ required: true, message: '题型名称为必填项', trigger: 'change' }],
-        langDesc: [{ required: true, message: '题型描述为必填项', trigger: 'change' }],
-        langImgSrc: [{ required: true, message: '请上传题型图像', trigger: 'change' }],
-        isRecommend: [{ required: true, message: '是否显示推荐为必选项', trigger: 'change' }]
+        langDesc: [{ required: true, message: '题型描述为必填项', trigger: 'change' }]
       },
       myBackToTopStyle: {
         right: '50px',
@@ -192,46 +140,10 @@ export default {
         this.listLoading = false
       }, 500)
     },
-    confirmDeleteType(row) {
-      this.$confirm('确定删除该题型吗?若该题型下已有发布试卷则无法删除', '提示', {
-        confirmButtonText: '确定删除',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        if (row.queCount > 0) {
-          this.$message({
-            message: '该题型已有发布试卷，无法删除',
-            type: 'error'
-          })
-        } else {
-          this.deleteType(row)
-        }
-      }).catch(() => {
-      })
-    },
-    async deleteType(row) {
-      const result = await reqDeleteType(row.langId)
-      if (result.statu === 0) {
-        this.$message({
-          message: '删除成功',
-          type: 'success'
-        })
-        this.getList()
-      } else {
-        this.$message({
-          message: result.msg,
-          type: 'error'
-        })
-      }
-    },
     async handleFilter() {
       this.listQuery.page = 1
       this.listLoading = true
-      let isRecommend = this.listQuery.isRecommend
-      if (this.listQuery.isRecommend === null || this.listQuery.isRecommend === undefined|| this.listQuery.isRecommend === "") {
-        isRecommend = undefined
-      }
-      const result = await reqSearchTypesList(this.listQuery.langName, isRecommend)
+      const result = await reqSearchTypesList(this.listQuery.langName)
       if (result.statu === 0) {
         this.total = result.data.length
         this.list = result.data.filter((item, index) => index < this.listQuery.limit * this.listQuery.page && index >= this.listQuery.limit * (this.listQuery.page - 1))
@@ -246,7 +158,6 @@ export default {
         langName: '',
         langDesc: '',
         langImgSrc: '',
-        isRecommend: ''
       }
     },
     handleUpdate(row) {
@@ -282,63 +193,6 @@ export default {
           type: 'error'
         })
       }
-    },
-    handleCreate() {
-      this.resetTemp()
-      this.dialogStatus = '添加'
-      this.dialogFormVisible = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
-    },
-    createData() {
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
-          this.insertTypeInfo()
-        }
-      })
-    },
-    async insertTypeInfo() {
-      const temp = this.temp
-    //   const admin = this.$store.state.admin.userInfo
-    //   temp.langCreatedBy = admin.admName
-      const result = await reqInsertTypeInfo(temp)
-      if (result.statu === 0) {
-        this.dialogFormVisible = false
-        this.$notify({
-          title: '成功',
-          message: '添加成功',
-          type: 'success',
-          duration: 2000
-        })
-        this.getList()
-      } else {
-        this.$notify({
-          title: '失败',
-          message: result.msg,
-          type: 'error',
-          duration: 2000
-        })
-      }
-    },
-    handleAvatarSuccess(res, file) {
-      // this.temp.pictureSrc = URL.createObjectURL(file.raw)
-      this.temp.langImgSrc = res.data
-    },
-    beforeAvatarUpload(file) {
-      const isType = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/gif'
-      const isLt4M = file.size / 1024 / 1024 < 4
-
-      if (!isType) {
-        this.$message.error('上传头像图片只能是 JPG/PNG/GIF 格式!')
-      }
-      if (!isLt4M) {
-        this.$message.error('上传头像图片大小不能超过 4MB!')
-      }
-      return isType && isLt4M
-    },
-    deletePictureSrc() {
-      this.temp.langImgSrc = ''
     }
   }
 }

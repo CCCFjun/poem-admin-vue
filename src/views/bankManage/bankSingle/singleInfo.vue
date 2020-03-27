@@ -30,11 +30,6 @@
             <el-form-item label="">
               <span>{{ scope.row.content }}</span>
             </el-form-item>
-            <!-- <el-form-item label="">
-              <viewer v-if="scope.row.pictureSrc">
-                <img :src="scope.row.pictureSrc">
-              </viewer>
-            </el-form-item> -->
             <el-form-item v-if="scope.row.choiceA" label="">
               <span>{{ scope.row.choiceA }}</span>
             </el-form-item>
@@ -46,6 +41,12 @@
             </el-form-item>
             <el-form-item v-if="scope.row.choiceD" label="">
               <span>{{ scope.row.choiceD }}</span>
+            </el-form-item>
+            <el-form-item v-if="scope.row.choiceE" label="">
+              <span>{{ scope.row.choiceE }}</span>
+            </el-form-item>
+            <el-form-item v-if="scope.row.choiceF" label="">
+              <span>{{ scope.row.choiceF }}</span>
             </el-form-item>
             <el-form-item label="题目答案：">
               <span>{{ scope.row.singleAnswer }}</span>
@@ -81,9 +82,6 @@
       </el-table-column>
       <el-table-column prop="langId" label="题目类型" align="center" width="160">
         <template slot-scope="scope">
-          <!-- <viewer>
-            <img :src="scope.row.langImgSrc" style="width: 40px;height: 40px;border-radius: 20px;">
-          </viewer> -->
           <div>{{ scope.row.langName }}</div>
         </template>
       </el-table-column>
@@ -101,6 +99,11 @@
 
     <el-dialog :visible.sync="dialogFormVisible" :title="dialogStatus">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="120px" style="width: 400px; margin-left:50px;">
+        <el-form-item label="所属题型" prop="langId">
+          <el-select v-model="temp.langId" placeholder="请选择题型" clearable style="width: 200px;margin-right: 15px;" class="filter-item" >
+            <el-option v-for="item in langOptions" :key="item.key" :label="item.label" :value="item.key" />
+          </el-select>
+        </el-form-item>
         <el-form-item label="题目内容" prop="content">
           <el-input v-model="temp.content" :rows="5" type="textarea" />
         </el-form-item>
@@ -110,7 +113,7 @@
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
             class="avatar-uploader"
-            action="/api/teacher/uploadPicture">
+            action="/api/admin/uploadPicture">
             <img v-if="temp.pictureSrc" :src="temp.pictureSrc" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"/>
           </el-upload>
@@ -118,32 +121,61 @@
             删除
           </el-button>
         </el-form-item>
+        <div v-if="temp.langId == 12">
         <el-form-item label="选项A" prop="choiceA">
-          <el-input v-model="temp.choiceA" placeholder="内容必须以字符A加:开头" />
+          <el-input v-model="temp.choiceA" placeholder="选项请以字符A:开头" />
         </el-form-item>
         <el-form-item label="选项B" prop="choiceB">
-          <el-input v-model="temp.choiceB" placeholder="内容必须以字符B加:开头" />
+          <el-input v-model="temp.choiceB" placeholder="选项请以字符B:开头" />
         </el-form-item>
         <el-form-item label="选项C" prop="choiceC">
-          <el-input v-model="temp.choiceC" placeholder="内容必须以字符C加:开头" />
+          <el-input v-model="temp.choiceC" placeholder="选项请以字符C:开头" />
         </el-form-item>
-        <el-form-item label="选项D" prop="choiceD">
-          <el-input v-model="temp.choiceD" placeholder="内容必须以字符D加:开头" />
+        </div>
+        <div v-if="temp.langId == 14">
+          <el-form-item label="选项A" prop="choiceA">
+          <el-input v-model="temp.choiceA" placeholder="仅填写单个汉字" />
         </el-form-item>
+        <el-form-item label="选项B" prop="choiceB">
+          <el-input v-model="temp.choiceB" placeholder="仅填写单个汉字" />
+        </el-form-item>
+        <el-form-item label="选项C" prop="choiceC">
+          <el-input v-model="temp.choiceC" placeholder="仅填写单个汉字" />
+        </el-form-item>
+        <el-form-item label="选项D" prop="choiceD" >
+          <el-input v-model="temp.choiceD" placeholder="仅填写单个汉字" />
+        </el-form-item>
+        <el-form-item label="选项E" prop="choiceE">
+          <el-input v-model="temp.choiceE" placeholder="仅填写单个汉字" />
+        </el-form-item>
+        <el-form-item label="选项F" prop="choiceF">
+          <el-input v-model="temp.choiceF" placeholder="仅填写单个汉字" />
+        </el-form-item>
+        </div>
+        <div v-if="temp.langId == 15">
+        <el-form-item label="线索1" prop="choiceA">
+          <el-input v-model="temp.choiceA" placeholder="输入线索描述词" />
+        </el-form-item>
+        <el-form-item label="线索2" prop="choiceB">
+          <el-input v-model="temp.choiceB" placeholder="输入线索描述词" />
+        </el-form-item>
+        <el-form-item label="线索3" prop="choiceC">
+          <el-input v-model="temp.choiceC" placeholder="输入线索描述词" />
+        </el-form-item>
+        </div>
         <el-form-item label="题目答案" prop="singleAnswer">
-          <el-radio v-model="temp.singleAnswer" label="A">A</el-radio>
-          <el-radio v-model="temp.singleAnswer" label="B">B</el-radio>
-          <el-radio v-model="temp.singleAnswer" label="C">C</el-radio>
-          <el-radio v-model="temp.singleAnswer" label="D">D</el-radio>
+          <el-radio v-model="temp.singleAnswer" label="A" v-if="temp.langId == 14 || temp.langId == 12">A</el-radio>
+          <el-radio v-model="temp.singleAnswer" label="B" v-if="temp.langId == 14 || temp.langId == 12">B</el-radio>
+          <el-radio v-model="temp.singleAnswer" label="C" v-if="temp.langId == 14 || temp.langId == 12">C</el-radio>
+          <el-radio v-model="temp.singleAnswer" label="D" v-if="temp.langId == 14">D</el-radio>
+          <el-radio v-model="temp.singleAnswer" label="E" v-if="temp.langId == 14">E</el-radio>
+          <el-radio v-model="temp.singleAnswer" label="F" v-if="temp.langId == 14">F</el-radio>
+          <el-input v-model="temp.singleAnswer" placeholder="请输入答案"></el-input>
         </el-form-item>
         <el-form-item label="答案解析">
           <el-input v-model="temp.answerExplain" :rows="5" type="textarea" />
         </el-form-item>
-        <el-form-item label="所属题型" prop="langId">
-          <el-select v-model="temp.langId" placeholder="请选择题型" clearable style="width: 200px;margin-right: 15px;" class="filter-item" >
-            <el-option v-for="item in langOptions" :key="item.key" :label="item.label" :value="item.key" />
-          </el-select>
-        </el-form-item>
+        
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
@@ -194,10 +226,10 @@ export default {
         choiceA: '',
         choiceB: '',
         choiceC: '',
-        choiceD: '',
-        choiceE: '',
-        choiceF: '',
-        choiceG: '',
+        choiceD: undefined,
+        choiceE: undefined,
+        choiceF: undefined,
+        choiceG: undefined,
         singleAnswer: '',
         answerExplain: '',
         langId: undefined
@@ -208,8 +240,10 @@ export default {
         content: [{ required: true, message: '题目内容为必填项', trigger: 'change' }],
         choiceA: [{ required: true, message: '选项A为必填项', trigger: 'change' }],
         choiceB: [{ required: true, message: '选项B为必填项', trigger: 'change' }],
-        // choiceC: [{ required: true, message: '选项C为必填项', trigger: 'change' }],
-        // choiceD: [{ required: true, message: '选项D为必填项', trigger: 'change' }],
+        choiceC: [{ required: true, message: '选项C为必填项', trigger: 'change' }],
+        choiceD: [{ required: true, message: '选项D为必填项', trigger: 'change' }],
+        choiceE: [{ required: true, message: '选项E为必填项', trigger: 'change' }],
+        choiceF: [{ required: true, message: '选项F为必填项', trigger: 'change' }],
         singleAnswer: [{ required: true, message: '题目答案为必填项', trigger: 'change' }],
         langId: [{ required: true, message: '所属题型为必填项', trigger: 'change' }]
       },
@@ -295,10 +329,10 @@ export default {
         choiceA: '',
         choiceB: '',
         choiceC: '',
-        choiceD: '',
-        choiceE: '',
-        choiceF: '',
-        choiceG: '',
+        choiceD: undefined,
+        choiceE: undefined,
+        choiceF: undefined,
+        choiceG: undefined,
         singleAnswer: '',
         answerExplain: '',
         langId: undefined

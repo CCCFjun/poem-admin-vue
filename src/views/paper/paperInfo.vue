@@ -110,9 +110,9 @@
           <span>{{ scope.row.paperType===1?'随机组卷':'固定组卷' }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="totalScore" sortable label="题数" align="center" width="80">
+      <el-table-column prop="totalNum" sortable label="题数" align="center" width="80">
         <template slot-scope="scope">
-          <span>{{ scope.row.totalScore }}</span>
+          <span>{{ scope.row.totalNum }}</span>
         </template>
       </el-table-column>
       <el-table-column prop="participateNum" sortable label="参加人数" align="center" width="110">
@@ -201,7 +201,7 @@
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
             class="avatar-uploader"
-            action="/api/teacher/uploadPicture"
+            action="/api/admin/uploadPicture"
           >
             <img v-if="temp.paperImgSrc" :src="temp.paperImgSrc" class="avatar" />
             <i v-else class="el-icon-plus avatar-uploader-icon" />
@@ -274,7 +274,7 @@
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
             class="avatar-uploader"
-            action="/api/teacher/uploadPicture"
+            action="/api/admin/uploadPicture"
           >
             <img v-if="temp.paperImgSrc" :src="temp.paperImgSrc" class="avatar" />
             <i v-else class="el-icon-plus avatar-uploader-icon" />

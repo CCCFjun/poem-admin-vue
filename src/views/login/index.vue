@@ -164,7 +164,6 @@ $light_gray:#eee;
   height: 100%;
   width: 100%;
   background-color: $bg;
-  background-image: url("http://qiniu.maweitao.top/backend-bg-img-min.png");
   background-repeat: no-repeat;
   background-size: 100% 100%;
   .login-form {

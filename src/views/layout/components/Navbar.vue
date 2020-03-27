@@ -14,7 +14,7 @@
 
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
         <div class="avatar-wrapper">
-          <img src="@/assets/images/teacher.jpg" class="user-avatar">
+          <img src="@/assets/images/admin.png" class="user-avatar">
           <i class="el-icon-caret-bottom"/>
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
@@ -93,7 +93,7 @@ export default {
     async logout() {
       const result = await reqLogOut()
       if (result.statu === 0) {
-        // 移除localStorage中teacherInfo
+        // 移除localStorage中Info
         removeStore('userInfo')
         // 重置vuex中userInfo
         this.$store.dispatch('resetUserInfo')

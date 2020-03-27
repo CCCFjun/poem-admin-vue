@@ -1,13 +1,9 @@
 <template>
   <div :class="['dashboard-container',{'dashboard-padding' : device !=='mobile'}]">
-    <div class="teacher_info">
-      <el-col :xs="{span: 24}" :sm="{span: 12}" :md="{span: 12}" :lg="{span: 7}" :xl="{span: 7}">
+    <div class="admin_info">
+      <el-col :span="6">
         <box-card />
       </el-col>
-    </div>
-
-    <div>
-      <img :src="emptyGif" class="emptyGif">
     </div>
   </div>
 </template>
@@ -25,8 +21,6 @@ export default {
   },
   data() {
     return {
-      teaImg: require('@/assets/images/teacher.jpg'),
-      emptyGif: require('@/assets/images/home_img.png')
     }
   },
   computed: {
@@ -39,14 +33,10 @@ export default {
 </script>
 
 <style type="text/scss" rel="stylesheet/scss" lang="scss" scoped>
-  .emptyGif {
-    display: block;
-    width: 45%;
-    margin: 0 auto;
-  }
   .dashboard {
     &-container {
-      background-color: #e3e3e3;
+      background-image: url(../../assets/images/bashbg.png);
+      // background-color: rgb(190,216,210);
       min-height: 93vh;
     }
     &-padding {
