@@ -1,6 +1,6 @@
 import ajax from '@/config/ajax'
-// const BASE_URL = "/api/admin"
-const BASE_URL = "http://101.37.13.111:8085/api/admin"
+const BASE_URL = "/api/admin"
+// const BASE_URL = "http://101.37.13.111:8085/api/admin"
 
 // 获取全部用户信息
 export const reqGetUserList = () => ajax(BASE_URL + '/getUserList')

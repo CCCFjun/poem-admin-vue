@@ -24,7 +24,7 @@
         </span>
       </el-form-item>
       <el-form-item>
-        <el-button :loading="loading" type="primary" style="width:100%;" @click.native.prevent="handleLogin">
+        <el-button :loading="loading" style="width:100%;" @click.native.prevent="handleLogin">
           登录
         </el-button>
       </el-form-item>
@@ -122,7 +122,7 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" type="text/scss">
-$bg:#2d3a4b;
+// $bg:#2d3a4b;
 $light_gray:#eee;
 
 /* reset element-ui css */
@@ -132,38 +132,37 @@ $light_gray:#eee;
     height: 47px;
     width: 85%;
     input {
-      background: transparent;
+      // background: transparent;
       border: 0px;
-      -webkit-appearance: none;
+      // -webkit-appearance: none;
       border-radius: 0px;
       padding: 12px 5px 12px 15px;
-      color: $light_gray;
+      // color: $light_gray;
       height: 47px;
-      &:-webkit-autofill {
-        -webkit-box-shadow: 0 0 0px 1000px $bg inset !important;
-        -webkit-text-fill-color: #fff !important;
-      }
+      // &:-webkit-autofill {
+      //   -webkit-box-shadow: 0 0 0px 1000px $bg inset !important;
+      //   -webkit-text-fill-color: #fff !important;
+      // }
     }
   }
   .el-form-item {
     border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(0, 0, 0, 0.1);
+    background: rgb(255, 255, 255);
     border-radius: 5px;
-    color: #454545;
+    color: #fff;
   }
 }
 
 </style>
 
 <style type="text/scss" rel="stylesheet/scss" lang="scss" scoped>
-$bg:#2d3a4b;
-$dark_gray:#889aa4;
-$light_gray:#eee;
+$dark_gray:#d1c0bd;
+$light_gray:#0c345b;
 .login-container {
   position: fixed;
   height: 100%;
   width: 100%;
-  background-color: $bg;
+  background-image: url(../../assets/images/loginbg.png);
   background-repeat: no-repeat;
   background-size: 100% 100%;
   .login-form {
@@ -174,18 +173,8 @@ $light_gray:#eee;
     max-width: 100%;
     padding: 35px 35px 15px 35px;
     margin: 120px auto;
-    background-color: rgba(0,0,0,.5);
+    background-color: rgba(240,233,226,.8);
     border-radius: 20px;
-  }
-  .tips {
-    font-size: 14px;
-    color: #fff;
-    margin-bottom: 10px;
-    span {
-      &:first-of-type {
-        margin-right: 16px;
-      }
-    }
   }
   .svg-container {
     padding: 6px 5px 6px 15px;
