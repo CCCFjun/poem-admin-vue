@@ -169,7 +169,6 @@ export const constantRouterMap = [
       }
     ]
   },
-
   {
     path: '/type',
     component: Layout,
@@ -179,6 +178,18 @@ export const constantRouterMap = [
         name: 'type',
         component: () => import('@/views/type/typeTable'),
         meta: { title: '题型管理', icon: 'subject' }
+      }
+    ]
+  },
+  {
+    path: '/forum',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'forum',
+        component: () => import('@/views/forum/forum'),
+        meta: { title: '帖子管理', icon: 'info' }
       }
     ]
   },
@@ -214,7 +225,7 @@ export const constantRouterMap = [
         path: 'index',
         name: 'Notice',
         component: () => import('@/views/notice/infoTable'),
-        meta: { title: '公告管理', icon: 'notice' }
+        meta: { title: '公告管理', icon: 'explain' }
       }
     ]
   },

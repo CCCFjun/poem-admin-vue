@@ -1,6 +1,9 @@
 import ajax from '@/config/ajax'
-const BASE_URL = "/api/admin"
-// const BASE_URL = "http://101.37.13.111:8085/api/admin"
+// const BASE_URL = "/api/admin"
+const BASE_URL = "http://101.37.13.111:8085/api/admin"
+
+//根据单判填选出题型
+export const reqGetLangOptionByType = (type) => ajax(BASE_URL + '/getLangOptionByType', {type})
 // 获取全部单选题信息
 export const reqGetSingleList = () => ajax(BASE_URL + '/getSingleList')
 // 获取搜素单选题信息

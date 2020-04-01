@@ -3,7 +3,7 @@
     <div class="filter-container">
       <el-input v-model="listQuery.content" placeholder="搜索题目内容" clearable style="width: 200px;margin-right: 15px;" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-select v-model="listQuery.langId" placeholder="搜索题型下的问题" clearable style="width: 200px;margin-right: 15px;" class="filter-item" @change="handleFilter">
-        <el-option v-for="item in langOptions" :key="item.key" :label="item.label" :value="item.key" />
+        <el-option v-for="item in langOptions" :key="item.langId" :label="item.langName" :value="item.langId" />
       </el-select>
       <el-select v-model="listQuery.composeFlag" placeholder="搜索是否被组成试卷" clearable style="width: 200px;margin-right: 15px;" class="filter-item" @change="handleFilter">
         <el-option v-for="item in composeFlagOptions" :key="item.key" :label="item.label" :value="item.key" />
@@ -89,7 +89,7 @@
         </el-form-item>
         <el-form-item label="题目类型" prop="langId">
           <el-select v-model="temp.langId" placeholder="请选择题型" clearable style="width: 200px;margin-right: 15px;" class="filter-item" >
-            <el-option v-for="item in langOptions" :key="item.key" :label="item.label" :value="item.key" />
+            <el-option v-for="item in langOptions" :key="item.langId" :label="item.langName" :value="item.langId"  />
           </el-select>
         </el-form-item>
       </el-form>
@@ -112,7 +112,7 @@
 </template>
 
 <script>
-import { reqGetJudgeList, reqSearchJudgeList, reqDeleteJudge, reqInsertJudgeInfo, reqUpdateJudgeInfo } from '@/api/bankManage'
+import { reqGetJudgeList, reqSearchJudgeList, reqDeleteJudge, reqInsertJudgeInfo, reqUpdateJudgeInfo, reqGetLangOptionByType } from '@/api/bankManage'
 import waves from '@/directive/waves' // Waves directive
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import BackToTop from '@/components/BackToTop'
@@ -163,13 +163,20 @@ export default {
   },
   created() {
     this.getList()
+    this.getListByType()
   },
   methods: {
+    async getListByType() {
+      let type = 2
+      const result = await reqGetLangOptionByType(type)
+      if (result.statu === 0) {
+        this.langOptions = result.data
+      }
+    },
     async getList() {
       this.listLoading = true
       const result = await reqGetJudgeList()
       if (result.statu === 0) {
-        this.langOptions = result.data.langOptions
         this.total = result.data.judgeList.length
         this.list = result.data.judgeList.filter((item, index) => index < this.listQuery.limit * this.listQuery.page && index >= this.listQuery.limit * (this.listQuery.page - 1))
       }

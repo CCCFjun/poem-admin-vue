@@ -3,7 +3,7 @@
     <div class="filter-container">
       <el-input v-model="listQuery.content" placeholder="搜索题目内容" clearable style="width: 200px;margin-right: 15px;" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-select v-model="listQuery.langId" placeholder="搜索题型下的问题" clearable style="width: 200px;margin-right: 15px;" class="filter-item" @change="handleFilter">
-        <el-option v-for="item in langOptions" :key="item.key" :label="item.label" :value="item.key" />
+        <el-option v-for="item in langOptions" :key="item.langId" :label="item.langName" :value="item.langId" />
       </el-select>
       <el-select v-model="listQuery.composeFlag" placeholder="搜索是否被组成试卷" clearable style="width: 200px;margin-right: 15px;" class="filter-item" @change="handleFilter">
         <el-option v-for="item in composeFlagOptions" :key="item.key" :label="item.label" :value="item.key" />
@@ -101,7 +101,7 @@
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="120px" style="width: 400px; margin-left:50px;">
         <el-form-item label="所属题型" prop="langId">
           <el-select v-model="temp.langId" placeholder="请选择题型" clearable style="width: 200px;margin-right: 15px;" class="filter-item" >
-            <el-option v-for="item in langOptions" :key="item.key" :label="item.label" :value="item.key" />
+            <el-option v-for="item in langOptions" :key="item.langId" :label="item.langName" :value="item.langId" />
           </el-select>
         </el-form-item>
         <el-form-item label="题目内容" prop="content">
@@ -113,7 +113,7 @@
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
             class="avatar-uploader"
-            action="/api/admin/uploadPicture">
+            action="http://101.37.13.111:8085/api/admin/uploadPicture">
             <img v-if="temp.pictureSrc" :src="temp.pictureSrc" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"/>
           </el-upload>
@@ -196,7 +196,7 @@
 </template>
 
 <script>
-import { reqGetSingleList, reqSearchSingleList, reqDeleteSingle, reqInsertSingleInfo, reqUpdateSingleInfo } from '@/api/bankManage'
+import { reqGetSingleList, reqSearchSingleList, reqDeleteSingle, reqInsertSingleInfo, reqUpdateSingleInfo, reqGetLangOptionByType } from '@/api/bankManage'
 import waves from '@/directive/waves' // Waves directive
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import BackToTop from '@/components/BackToTop'
@@ -261,17 +261,24 @@ export default {
   },
   created() {
     this.getList()
+    this.getListByType()
   },
   methods: {
     async getList() {
       this.listLoading = true
       const result = await reqGetSingleList()
       if (result.statu === 0) {
-        this.langOptions = result.data.langOptions
         this.total = result.data.singleList.length
         this.list = result.data.singleList.filter((item, index) => index < this.listQuery.limit * this.listQuery.page && index >= this.listQuery.limit * (this.listQuery.page - 1))
       }
       this.listLoading = false
+    },
+    async getListByType() {
+      let type = 1
+      const result = await reqGetLangOptionByType(type)
+      if (result.statu === 0) {
+        this.langOptions = result.data
+      }
     },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // 复制对象

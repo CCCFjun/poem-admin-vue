@@ -3,7 +3,7 @@
     <div class="filter-container">
       <el-input v-model="listQuery.content" placeholder="搜索题目内容" clearable style="width: 200px;margin-right: 15px;" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-select v-model="listQuery.langId" placeholder="搜索题型下的问题" clearable style="width: 200px;margin-right: 15px;" class="filter-item" @change="handleFilter">
-        <el-option v-for="item in langOptions" :key="item.key" :label="item.label" :value="item.key" />
+        <el-option v-for="item in langOptions" :key="item.langId" :label="item.langName" :value="item.langId" />
       </el-select>
       <el-select v-model="listQuery.composeFlag" placeholder="搜索是否被组成试卷" clearable style="width: 200px;margin-right: 15px;" class="filter-item" @change="handleFilter">
         <el-option v-for="item in composeFlagOptions" :key="item.key" :label="item.label" :value="item.key" />
@@ -94,7 +94,7 @@
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
             class="avatar-uploader"
-            action="/api/admin/uploadPicture">
+            action="http://101.37.13.111:8085/api/admin/uploadPicture">
             <img v-if="temp.fillImgSrc" :src="temp.fillImgSrc" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"/>
           </el-upload>
@@ -110,7 +110,7 @@
         </el-form-item>
         <el-form-item label="题目类型" prop="langId">
           <el-select v-model="temp.langId" placeholder="请选择题目类型" clearable style="width: 200px;margin-right: 15px;" class="filter-item" >
-            <el-option v-for="item in langOptions" :key="item.key" :label="item.label" :value="item.key" />
+            <el-option v-for="item in langOptions" :key="item.langId" :label="item.langName" :value="item.langId" />
           </el-select>
         </el-form-item>
       </el-form>
@@ -133,7 +133,7 @@
 </template>
 
 <script>
-import { reqGetFillList, reqSearchFillList, reqDeleteFill, reqInsertFillInfo, reqUpdateFillInfo } from '@/api/bankManage'
+import { reqGetFillList, reqSearchFillList, reqDeleteFill, reqInsertFillInfo, reqUpdateFillInfo, reqGetLangOptionByType } from '@/api/bankManage'
 import waves from '@/directive/waves' // Waves directive
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import BackToTop from '@/components/BackToTop'
@@ -185,13 +185,20 @@ export default {
   },
   created() {
     this.getList()
+    this.getListByType()
   },
   methods: {
+    async getListByType() {
+      let type = 3
+      const result = await reqGetLangOptionByType(type)
+      if (result.statu === 0) {
+        this.langOptions = result.data
+      }
+    },
     async getList() {
       this.listLoading = true
       const result = await reqGetFillList()
       if (result.statu === 0) {
-        this.langOptions = result.data.langOptions
         this.total = result.data.fillList.length
         this.list = result.data.fillList.filter((item, index) => index < this.listQuery.limit * this.listQuery.page && index >= this.listQuery.limit * (this.listQuery.page - 1))
       }

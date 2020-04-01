@@ -35,7 +35,7 @@ export default {
           '(必填)题目内容',
           '(必填)题目答案(填写正确答案字符串)',
           '(选填)答案解析',
-          '(必填)所属题型(Java填1,C++填2,Android填3,IOS填4,php填5,Python填6,Ruby填7,Go填8,JavaScript填9)'
+          '(必填)所属题型(承上启下填10,画中有话填11)'
         ]
         excel.export_json_to_excel({
           header: tHeader,
@@ -72,7 +72,7 @@ export default {
           if (key === '(选填)答案解析') {
             fill.answerExplain = item[key]
           }
-          if (key === '(必填)所属题型(Java填1,C++填2,Android填3,IOS填4,php填5,Python填6,Ruby填7,Go填8,JavaScript填9)') {
+          if (key === '(必填)所属题型(承上启下填10,画中有话填11)') {
             fill.langId = item[key]
           }
         })

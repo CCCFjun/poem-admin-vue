@@ -175,7 +175,7 @@ export default {
       })
     },
     async handleUpdatePsw(row) {
-      row.userPsw = '123456'
+      row.userPsw = 'e10adc3949ba59abbe56e057f20f883e' //md5加密的123456
       let result = await reqUpdateUserInfo(row)
       if (result.statu === 0){
         this.$message({

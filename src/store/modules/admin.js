@@ -1,4 +1,4 @@
-import { reqGetUnReplyCount } from '@/api/feedback'
+
 const admin = {
   state: {
     // 用户信息
@@ -39,13 +39,6 @@ const admin = {
     // 重置学生成绩图表页面选中的paperId
     resetPaperId({ commit }) {
       commit('RESET_PAPERID')
-    },
-    async recordUnReplyCount({ commit }) {
-      const result = await reqGetUnReplyCount()
-      if (result.statu === 0) {
-        const unReplyCount = result.data
-        commit('RECORD_UNREPLYCOUNT', { unReplyCount })
-      }
     }
   }
 }

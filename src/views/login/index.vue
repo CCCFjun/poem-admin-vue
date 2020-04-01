@@ -98,7 +98,8 @@ export default {
       })
     },
     async adminLogin() {
-      const result = await reqLogin(this.loginForm.username, this.loginForm.password)
+      let mdpsw = this.$md5(this.loginForm.password)
+      const result = await reqLogin(this.loginForm.username, mdpsw)
       if (result.statu === 0) {
         this.loading = false
         this.$store.dispatch('recordUserInfo', result.data)

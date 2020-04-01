@@ -5,8 +5,6 @@
 
     <div class="right-menu">
       <router-link class="right-menu-item hover-effect" to="/feedback/index" style="position: relative">
-        <el-badge v-if="unReplyCount !== 0" :value="unReplyCount" style="position: absolute;left: 16px;top: -6px"/>
-        <i class="el-icon-bell"/>
       </router-link>
       <template v-if="device!=='mobile'">
         <screenfull id="screenfull" class="right-menu-item hover-effect"/>
@@ -49,29 +47,22 @@ export default {
   },
   data() {
     return {
-      path: process.env.BASE_WEBSOCKET + this.$store.state.admin.userInfo.ano,
-      socket: ''
+      
     }
   },
   computed: {
     ...mapGetters([
       'sidebar',
-      'device',
-      'unReplyCount'
+      'device'
     ])
   },
   created() {
-    this.$store.dispatch('recordUnReplyCount')
-    console.log(this.unReplyCount)
+    
   },
   mounted() {
-    // 初始化
-    this.init()
+    
   },
-  destroyed() {
-    // 销毁监听
-    this.socket.onclose = this.close()
-  },
+  
   methods: {
     toggleSideBar() {
       this.$store.dispatch('ToggleSideBar')
@@ -110,41 +101,7 @@ export default {
         })
       }
     },
-    init: function() {
-      if (typeof (WebSocket) === undefined) {
-        this.$message.error('您的浏览器不支持socket')
-      } else {
-        // 实例化socket
-        this.socket = new WebSocket(this.path)
-        // 监听socket连接
-        this.socket.onopen = this.open
-        // 监听socket错误信息
-        this.socket.onerror = this.error
-        // 监听socket消息
-        this.socket.onmessage = this.getMessage
-      }
-    },
-    open: function() {
-      console.log('socket连接成功')
-    },
-    error: function() {
-      console.log('连接错误')
-    },
-    getMessage: function(msg) {
-      console.log(msg.data)
-      if (msg.data === '留言') {
-        // this.$message('新增一条待回复的留言');
-        setTimeout(() => {
-          this.$store.dispatch('recordUnReplyCount')
-        }, 1000)
-      }
-    },
-    send: function(message) {
-      this.socket.send(message)
-    },
-    close: function() {
-      console.log('socket已经关闭')
-    }
+    
   }
 }
 </script>

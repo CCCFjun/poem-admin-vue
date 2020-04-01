@@ -91,15 +91,6 @@
           <span>{{ scope.row.paperDuration/60 }}分钟</span>
         </template>
       </el-table-column>
-      <!-- <el-table-column prop="paperDifficulty" sortable label="难度系数" align="center" width="142">
-        <template slot-scope="scope">
-          <el-rate
-            v-model="scope.row.paperDifficulty"
-            disabled
-            text-color="#ff9900"
-            score-template="{value}"/>
-        </template>
-      </el-table-column>-->
       <el-table-column label="注意事项" width="120" align="center" show-overflow-tooltip>
         <template slot-scope="scope">
           <span>{{ scope.row.paperAttention || '暂无注意事项' }}</span>
@@ -187,13 +178,10 @@
             :picker-options="{
               start: '00:10',
               step: '00:10',
-              end: '05:00'
+              end: '01:00'
             }"
             placeholder="选择时间(时:分)"
           />
-        </el-form-item>
-        <el-form-item label="难度系数" prop="paperDifficulty">
-          <el-rate v-model="temp.paperDifficulty" style="margin-top: 10px" />
         </el-form-item>
         <el-form-item label="试卷封面" prop="paperImgSrc">
           <el-upload
@@ -201,7 +189,7 @@
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
             class="avatar-uploader"
-            action="/api/admin/uploadPicture"
+            action="http://101.37.13.111:8085/api/admin/uploadPicture"
           >
             <img v-if="temp.paperImgSrc" :src="temp.paperImgSrc" class="avatar" />
             <i v-else class="el-icon-plus avatar-uploader-icon" />
@@ -246,11 +234,6 @@
         label-width="100px"
         style="width: 400px; margin-left:50px;"
       >
-        <!-- <el-form-item label="所属题型" prop="langId">
-          <el-select v-model="temp.langId" placeholder="选择题型" clearable style="width: 200px;margin-right: 15px;" class="filter-item">
-            <el-option v-for="item in langOptions" :key="item.key" :label="item.label" :value="item.key" />
-          </el-select>
-        </el-form-item>-->
         <el-form-item label="试卷名称" prop="paperName">
           <el-input v-model="temp.paperName" />
         </el-form-item>
@@ -260,13 +243,10 @@
             :picker-options="{
               start: '00:10',
               step: '00:10',
-              end: '05:00'
+              end: '01:00'
             }"
             placeholder="选择时间(时:分)"
           />
-        </el-form-item>
-        <el-form-item label="难度系数" prop="paperDifficulty">
-          <el-rate v-model="temp.paperDifficulty" style="margin-top: 10px" />
         </el-form-item>
         <el-form-item label="试卷封面" prop="paperImgSrc">
           <el-upload
@@ -274,7 +254,7 @@
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
             class="avatar-uploader"
-            action="/api/admin/uploadPicture"
+            action="http://101.37.13.111:8085/api/admin/uploadPicture"
           >
             <img v-if="temp.paperImgSrc" :src="temp.paperImgSrc" class="avatar" />
             <i v-else class="el-icon-plus avatar-uploader-icon" />
@@ -354,7 +334,6 @@ export default {
         page: 1,
         limit: 10,
         paperName: undefined,
-        // langId: undefined,
         paperType: undefined
       },
       langOptions: [],
@@ -365,7 +344,6 @@ export default {
       temp: {
         paperName: "",
         paperDuration: "",
-        paperDifficulty: undefined,
         paperAttention: "",
         singleScore: 1,
         singleNum: undefined,
@@ -399,9 +377,6 @@ export default {
         paperDuration: [
           { required: true, message: "考试时长为必填项", trigger: "change" }
         ],
-        paperDifficulty: [
-          { required: true, message: "难度系数为必填项", trigger: "change" }
-        ],
         paperImgSrc: [
           { required: true, message: '请上传试卷图像', trigger: 'change' }
         ]
@@ -412,9 +387,6 @@ export default {
         ],
         paperDuration: [
           { required: true, message: "考试时长为必填项", trigger: "change" }
-        ],
-        paperDifficulty: [
-          { required: true, message: "难度系数为必填项", trigger: "change" }
         ],
         paperImgSrc: [
           { required: true, message: '请上传试卷图像', trigger: 'change' }
@@ -565,7 +537,6 @@ export default {
       this.temp = {
         paperName: "",
         paperDuration: "",
-        paperDifficulty: undefined,
         paperAttention: "",
         singleScore: 1,
         singleNum: undefined,
@@ -651,34 +622,12 @@ export default {
                 fillTwoNum.push(Number(restStr));
               }
             });
-            // if (!singleNum.length) {
-            //   this.$message({
-            //     message: '请选择至少一道单选题',
-            //     type: 'error'
-            //   })
-            // } else if (!multipleNum.length) {
-            //   this.$message({
-            //     message: '请选择至少一道多选题',
-            //     type: 'error'
-            //   })
-            // } else if (!judgeNum.length) {
-            //   this.$message({
-            //     message: '请选择至少一道判断题',
-            //     type: 'error'
-            //   })
-            // } else if (!fillNum.length) {
-            //   this.$message({
-            //     message: '请选择至少一道填空题',
-            //     type: 'error'
-            //   })
-            // } else {
             this.temp.singleNum = singleNum;
             // this.temp.multipleNum = multipleNum
             this.temp.judgeNum = judgeNum;
             this.temp.fillNum = fillNum;
             this.temp.fillTwoNum = fillTwoNum;
             this.fixedInsertPaperInfo();
-            // }
           } else {
             this.$message({
               message: "请勾选题目，如果该题型题目紧缺请选择其他题型组卷",

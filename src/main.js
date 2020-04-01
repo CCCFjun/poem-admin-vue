@@ -15,6 +15,9 @@ import router from './router'
 import '@/icons' // icon
 import '@/permission' // permission control
 
+import md5 from 'js-md5' //md5加密
+Vue.prototype.$md5 = md5
+
 // 引入图片查看器v-viewer
 import Viewer from 'v-viewer'
 import 'viewerjs/dist/viewer.css'
