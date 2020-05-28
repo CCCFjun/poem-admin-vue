@@ -76,10 +76,10 @@ export default {
           if (key === '(必填)题目内容') {
             single.singleContent = item[key]
           }
-          if (key === '(必填)') {
+          if (key === '(必填)选项A') {
             single.choiceA = item[key]
           }
-          if (key === '(必填)') {
+          if (key === '(必填)选项B') {
             single.choiceB = item[key]
           }
           if (key === '选项C') {

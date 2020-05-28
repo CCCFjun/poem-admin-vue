@@ -189,7 +189,7 @@
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
             class="avatar-uploader"
-            action="http://101.37.13.111:8085/api/admin/uploadPicture"
+            action="http://localhost:8085/api/admin/uploadPicture"
           >
             <img v-if="temp.paperImgSrc" :src="temp.paperImgSrc" class="avatar" />
             <i v-else class="el-icon-plus avatar-uploader-icon" />
@@ -254,7 +254,7 @@
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
             class="avatar-uploader"
-            action="http://101.37.13.111:8085/api/admin/uploadPicture"
+            action="http://localhost:8085/api/admin/uploadPicture"
           >
             <img v-if="temp.paperImgSrc" :src="temp.paperImgSrc" class="avatar" />
             <i v-else class="el-icon-plus avatar-uploader-icon" />
@@ -312,7 +312,8 @@ import {
   reqPaperQueDetailByPaperId,
   reqRandomInsertPaperInfo,
   reqFixedInsertPaperInfo,
-  reqPaperQueDetailByLangId
+  reqPaperQueDetailByLangId,
+  reqUpload
 } from "@/api/paper";
 import { reqGetFillList } from "@/api/bankManage";
 import waves from "@/directive/waves"; // Waves directive
@@ -702,6 +703,7 @@ export default {
       return data.label.indexOf(value) !== -1;
     },
     handleAvatarSuccess(res, file) {
+      
       // this.temp.pictureSrc = URL.createObjectURL(file.raw)
       this.temp.paperImgSrc = res.data;
     },
@@ -718,6 +720,15 @@ export default {
       if (!isLt4M) {
         this.$message.error("上传头像图片大小不能超过 4MB!");
       }
+      // let reader = new FileReader();
+      // reader.readAsDataURL(file)
+      // let imgUrlBase64;
+      // let t;
+      // reader.onload = function(){
+      //   reqUpload(this.result);
+      // }
+      // console.log(t)
+      // await reqUpload({file: imgUrlBase64});
       return isType && isLt4M;
     },
     deletePictureSrc() {

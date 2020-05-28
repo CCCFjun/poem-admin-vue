@@ -16,3 +16,4 @@ export const reqRandomInsertPaperInfo = (temp) => ajax(BASE_URL + '/randomInsert
 export const reqFixedInsertPaperInfo = (temp) => ajax(BASE_URL + '/fixedInsertPaperInfo', temp, 'POST')
 // 请求通过langId获取题型下的所有问题
 export const reqPaperQueDetailByLangId = () => ajax(BASE_URL + '/getPaperQueDetailByLangId')
+export const reqUpload = (file) => ajax(BASE_URL + '/uploadPicture', file, 'POST')
